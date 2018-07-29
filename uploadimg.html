@@ -1,0 +1,172 @@
+<body class="container">
+	<header>
+		<p style="color:red;">服务器识别一张图像可能需要 20 秒。</p>
+		<p>动漫图像无法识别。</p>
+		{% if output_str %}
+		<br><p>{{output_str}}</p>
+		{% endif %}
+	</header>
+	<div class="content">
+		<div class="imagebox">
+			<img src='{{ img.img.url }}' class="uploadimg"/>
+		</div>
+		<div id="model" class="modalDlg">
+			<p>识别算法: YOLOv3</p>
+			<button onclick="hideModel()">确定</button>
+		</div>
+	</div>
+	<footer>
+		<div class="box">
+			<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<input class="myFileUpload" onchange="enable()" type="file" name="img">
+			<button type="submit" class="byside" id="detect" disabled=true>识 别</button>
+			</form>
+			<!-- <button class="byside" id="photo">拍 照</button> -->
+			<button class="byside" onclick="showModel()">关 于</button>
+		</div>
+	</footer>
+	<div id="mask" class="mask"></div>
+</body>
+<script>
+	function enable(f){
+		var detect = document.getElementById("detect");
+		detect.disabled = false;
+	}
+	function showModel(){
+		var model = document.getElementById("model");
+		var mask = document.getElementById("mask");
+		model.style.setProperty('display','flex');
+		mask.style.setProperty('display','flex');
+	}
+	function hideModel(){
+		var model = document.getElementById("model");
+		var mask = document.getElementById("mask");
+		model.style.setProperty('display','none');
+		mask.style.setProperty('display','none');
+	}
+</script>
+<style>
+body {
+	/* background: linear-gradient(55deg, #5a0b72, #fc6289);  */
+	background: #fbe5ca;
+}
+
+.container {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+header{
+	flex: 1;
+	margin: 20px 20px;
+	text-align:left;
+	color:#fc6520;
+	font-size: 27px;
+}
+header p{
+	margin:1px;
+}
+
+.content {
+	flex: 10;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.imagebox{
+	max-height:1000px;
+	max-width:625px;
+}
+
+.uploadimg{
+	max-height:100%;
+	max-width:100%;
+}
+
+footer {
+	flex: 1;
+	display: flex;
+	min-height:100px;
+}
+
+.box {
+	display: flex;
+	width:100%;
+}
+
+.box form{
+	display: flex;
+	flex: 5;
+}
+.byside {
+	flex:1;
+	margin:0px 5px;
+	line-height:60px;
+	height:75px;
+	background: #fc6520;
+	color:#FBE5CA;
+	font-size: 45px;
+	border-radius: 10px;
+}
+
+.myFileUpload{
+	flex:4;
+	width:50%;
+	height:75px;
+	margin:0 5px;
+	background: #fc6520;
+	color:#FBE5CA;
+	font-size: 40px;
+	border-radius: 10px;
+}
+.mask{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: #000;
+	z-index: 1000;
+	opacity: 0.5;
+	display:none;
+}
+
+.modalDlg{
+	width: 580px;
+	height: 620px;
+	position: fixed;
+	top: 50%;
+	left: 11.5%;
+	z-index: 9999;
+	margin: -370px 66px;
+	padding: 20px;
+	background-color: #fbe5ca;
+	border-radius: 25px;
+	/* display: flex; */
+	flex-direction: column;
+	align-items: center;
+	display:none;
+}
+
+/* .modalDlg image{
+  border-radius: 25px;
+  height:80px;
+  width:80px;
+} */
+
+.modalDlg p{
+  flex:5;
+  padding: 5px;
+  color:#fc6520;
+  font-size: 30px;
+}
+
+.modalDlg button{
+  background: #fc6520;
+  color:#FBE5CA;
+  font-size: 30px;
+}
+</style>
